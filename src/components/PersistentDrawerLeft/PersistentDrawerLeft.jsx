@@ -1,17 +1,24 @@
-import React, {useState} from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import {Drawer, CssBaseline, AppBar, Toolbar, List, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText} from '@material-ui/core/';
+import Drawer from '@material-ui/core/Drawer';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import HomeIcon from '@material-ui/icons/Home'
-import AnnouncementIcon from '@material-ui/icons/Announcement';
-import AddCommentIcon from '@material-ui/icons/AddComment';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import routes from '../Router/routes';
 
-const drawerWidth = 260;
+const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
   },
@@ -29,14 +36,6 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-
-  logo: {
-    width: "13.05rem",
-    height: "auto",
-    position: "fixed",
-    right: "0",
-  },
-
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -74,17 +73,12 @@ const useStyles = makeStyles(theme => ({
     }),
     marginLeft: 0,
   },
-
-  blogPosts:{
-      marginLeft: "8px"
-  }
 }));
 
-export default function TemoraryDrawer(props) {
-
+export default function PersistentDrawerLeft() {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -106,7 +100,7 @@ export default function TemoraryDrawer(props) {
         <Toolbar>
           <IconButton
             color="inherit"
-            //aria-label="open drawer"
+            aria-label="open drawer"
             onClick={handleDrawerOpen}
             edge="start"
             className={clsx(classes.menuButton, open && classes.hide)}
@@ -114,7 +108,7 @@ export default function TemoraryDrawer(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            My Personal Blog
+            Corona News
           </Typography>
         </Toolbar>
       </AppBar>
@@ -132,30 +126,15 @@ export default function TemoraryDrawer(props) {
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
+        <Divider />
         <List>
-        <ListItem button component={"a"} onClick={handleDrawerClose} href="/contentful_blog" key={"Home"}>
-              <ListItemIcon><HomeIcon /></ListItemIcon>
-              <ListItemText primary={"Home"} />
-        </ListItem>
-
-        <Divider />
-            <ListItem key={"Latest_Posts"}>
-              <ListItemIcon><AnnouncementIcon /></ListItemIcon>
-              <ListItemText primary={"Latest Posts"} />
+          {routes.map((navelm, index) => (
+            <ListItem button key={navelm.path} component="a" href={navelm.path}>
+              <ListItemText primary={navelm.name} />
             </ListItem>
-
-            {props.top.items.map((item, index) =>
-            <ListItem onClick={() => {props.showSelected(item.fields.title); handleDrawerClose()}} button key={index}>
-                <ListItemText className={classes.blogPosts} primary={item.fields.title}></ListItemText>
-            </ListItem>
-            )}
-        <Divider />
-        <ListItem button component={"a"} href="https://be.contentful.com/login" key={"New_Post"}>
-          <ListItemIcon><AddCommentIcon /></ListItemIcon>
-          <ListItemText primary={"New Post"} />
-        </ListItem>
-
+          ))}
         </List>
+        <Divider />
       </Drawer>
     </div>
   );
